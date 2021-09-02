@@ -8,19 +8,10 @@ function getClima() {
         dataType: 'json',
 
         success: function (data) {
-
-            let conveterCelsius = (data.main.temp - 273.15);
-            celsius = (Math.round(conveterCelsius)+'C°');
-
-            $('#temperatura').html(celsius);
-            $('#condicao').html(data.weather[0].description.charAt(0).toUpperCase()+data.weather[0].description.slice(1));
-            $('#vento').html((data.wind.speed*3,6)+"km/h");
-            $('#umidade').html(data.main.humidity+'%');
-            $('#barra').css('width', data.main.humidity+'%');
-
-            let icone = 'img/imgprevisao/'+data.weather[0].icon+'.png';
-            $('#iconeCondicao').attr('src',icone);
-
+            plotarResultados(data);
+            //armazenando em local storage
+                localStorage.clima = JSON.stringify(data);
+                localStorage.alteracaoCache = new Date().getTime();
         },
 
         error: function (argument) {
@@ -31,6 +22,30 @@ function getClima() {
 
 }
 
+function plotarResultados(data) {
+
+    let conveterCelsius = (data.main.temp - 273.15);
+    celsius = (Math.round(conveterCelsius) + 'C°');
+
+    $('#temperatura').html(celsius);
+    $('#condicao').html(data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1));
+    $('#vento').html((data.wind.speed * 3, 6) + "km/h");
+    $('#umidade').html(data.main.humidity + '%');
+    $('#barra').css('width', data.main.humidity + '%');
+
+    let icone = 'img/imgprevisao/' + data.weather[0].icon + '.png';
+    $('#iconeCondicao').attr('src', icone);
+
+}
+
 window.onload = function () {
+
     getClima();
+    let data = JSON.parse(localStorage.clima);
+    plotarResultados(data);
+
+    setTimeout(function limparCache() {
+        localStorage.clear();
+    }, 300000);
+    
 };
