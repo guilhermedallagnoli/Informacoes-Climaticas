@@ -38,14 +38,32 @@ function plotarResultados(data) {
 
 }
 
+function getDadosClima() {
+
+    let data = JSON.parse(localStorage.clima);
+        plotarResultados(data);
+        
+    let = tempoAtual = new Date().getTime();
+    let tempoCache = parseInt(localStorage.alteracaoCache);
+    let diferencaTempos = tempoAtual - tempoCache;
+
+    if (diferencaTempos > 300000) {
+        getClima();
+    } else {
+        let data = JSON.parse(localStorage.clima);
+        plotarResultados(data);
+    }
+
+}
+
 window.onload = function () {
 
     getClima();
     let data = JSON.parse(localStorage.clima);
     plotarResultados(data);
 
-    setTimeout(function limparCache() {
-        localStorage.clear();
-    }, 300000);
+    //setTimeout(function limparCache() {
+    //    localStorage.clear();
+    //}, 300000);
     
 };
